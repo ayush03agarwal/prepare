@@ -20,7 +20,7 @@ public class LowestCommonAncestor {
         t.right.right.right = new TNode(9);
 
 
-        System.out.println(LCA(t, 9, 7).data);
+        System.out.println(LCA(t, 4, 10).data);
     }
 
     static TNode LCA(TNode root, int n1, int n2) {
@@ -28,18 +28,16 @@ public class LowestCommonAncestor {
         if (root == null) {
             return null;
         }
-
         if (root.data == n1 || root.data == n2) {
             return root;
         }
-
         TNode l = LCA(root.left, n1, n2);
         TNode r = LCA(root.right, n1, n2);
-
 
         if (l != null && r != null) {
             return root;
         }
+
         return l != null ? l : r;
 
     }
