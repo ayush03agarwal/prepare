@@ -1,9 +1,12 @@
 package one;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PacificAtlanticWaterFlow {
+    static int dir[][] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
     public static void main(String[] args) {
 
         int[][] height = {{1, 2, 2, 3, 5},
@@ -17,71 +20,51 @@ public class PacificAtlanticWaterFlow {
 
     public static List<List<Integer>> pacificAtlantic(int[][] heights) {
         List<List<Integer>> f = new ArrayList<>();
-        int[][] mat = new int[heights.length][heights[0].length];
+        boolean pac[][] = new boolean[heights.length][heights[0].length];
+        boolean atl[][] = new boolean[heights.length][heights[0].length];
+        List<List<Integer>> result = new ArrayList<>();
 
-        checkPacific(heights, mat);
-        checkAtlantic(heights, mat);
+        int row = heights.length;
+        int col = heights[0].length;
 
-        System.out.println(mat);
-        return null;
+        //DFS
+        for (int i = 0; i < col; i++) {
+            dfs(heights, pac, 0, i, Integer.MIN_VALUE);
+            dfs(heights, atl, row - 1, i, Integer.MIN_VALUE);
+        }
 
-    }
+        for (int i = 0; i < row; i++) {
+            dfs(heights, pac, i, 0, Integer.MIN_VALUE);
+            dfs(heights, atl, i, col - 1, Integer.MIN_VALUE);
+        }
 
-    // 1 means pacific
-    private static void checkPacific(int[][] heights, int[][] mat) {
-        for (int i = 0; i < mat.length; i++) {
-            for (int j = 0; j < mat[0].length; j++) {
-                if (i == 0 || j == 0) {
-                    mat[i][j] = 1;
-                    continue;
-                }
-                int up = i - 1;
-                int left = j - 1;
 
-                if (up < 0 || left < 0) {
-                    continue;
-                }
-
-                if ((heights[i][j] >= heights[up][j] && mat[up][j] == 1)
-                        ||
-                        (heights[i][j] >= heights[i][left] && mat[i][left] == 1)) {
-                    mat[i][j] = 1;
+        //Result
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (pac[i][j] && atl[i][j]) {
+                    result.add(Arrays.asList(i, j));
                 }
             }
         }
+
+        return result;
+
     }
 
-    // 1 means pacific
-    private static void checkAtlantic(int[][] heights, int[][] mat) {
-        for (int i = mat.length - 1; i >= 0; i--) {
-            for (int j = mat[0].length - 1; j >= 0; j--) {
-                if (i == mat.length - 1 || j == mat[0].length - 1) {
-                    if (mat[i][j] == 1) {
-                        mat[i][j] = 3;
-                    } else {
-                        mat[i][j] = 2;
-                    }
-                    continue;
-                }
-                int down = i + 1;
-                int right = j + 1;
+    private static void dfs(int[][] height, boolean[][] ocean, int i, int j, int prev) {
+        if (i < 0 || i >= height.length || j < 0 || j >= height[0].length) {
+            return;
+        }
 
-                if (down >= heights.length || right >= heights[0].length) {
-                    continue;
-                }
+        if (height[i][j] < prev || ocean[i][j]) {
+            return;
+        }
 
-                if ((heights[i][j] >= heights[down][j] && mat[down][j] == 2)
-                        ||
-                        (heights[i][j] <= heights[i][right] && mat[i][right] == 2)) {
-                    mat[i][j] = 2;
-                } else if ((heights[i][j] >= heights[down][j] && mat[down][j] == 3)
-                        ||
-                        (heights[i][j] <= heights[i][right] && mat[i][right] == 3)) {
-                    mat[i][j] = 3;
-                }
+        ocean[i][j] = true;
 
-
-            }
+        for (int[] d : dir) {
+            dfs(height, ocean, i + d[0], j + d[1], height[i][j]);
         }
     }
 }
