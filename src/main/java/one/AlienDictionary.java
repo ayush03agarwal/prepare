@@ -8,7 +8,7 @@ import java.util.Stack;
 public class AlienDictionary {
     public static void main(String[] args) {
 
-        String word[] = {"yz", "zy", "zx"};
+        String word[] = {"baa", "abcd", "abca", "cab", "cad"};
         System.out.println(alienOrder(word));
     }
 
