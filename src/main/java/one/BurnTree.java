@@ -42,7 +42,7 @@ public class BurnTree {
             TreeNode peek = q.peek();
             if (peek.getVisited() == 0) {
                 peek.setVisited(1);
-                System.out.println(peek.getKey());
+                System.out.println(peek.getVal());
                 if (peek.getLeft() != null)
                     q.add(peek.getLeft());
                 if (peek.getRight() != null)
@@ -56,8 +56,8 @@ public class BurnTree {
         if (node == null) {
             return;
         }
-        if (node.getKey() == target) {
-            System.out.println(node.getKey());
+        if (node.getVal() == target) {
+            System.out.println(node.getVal());
             if (node.getLeft() != null)
                 q.add(node.getLeft());
             if (node.getRight() != null)

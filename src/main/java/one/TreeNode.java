@@ -6,15 +6,15 @@ import lombok.Data;
 public class TreeNode {
 
     // data members
-    private int key;
-    private int visited;
-    private TreeNode left;
-    private TreeNode right;
+    public int val;
+    public int visited;
+    public TreeNode left;
+    public TreeNode right;
 
 
     // Constructor
-    public TreeNode(int key) {
-        this.key = key;
+    public TreeNode(int val) {
+        this.val = val;
         left = null;
         right = null;
         visited = 0;
