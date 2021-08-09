@@ -1,8 +1,10 @@
 package one;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class TreeNode {
 
     // data members
