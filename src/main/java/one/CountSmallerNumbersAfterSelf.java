@@ -1,29 +1,60 @@
 package one;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CountSmallerNumbersAfterSelf {
+    Node root;
+    int[] result;
+
     public static void main(String[] args) {
 
-        int[] i = {26, 78, 27, 100, 33, 67, 90, 23, 66, 5, 38, 7, 35, 23, 52, 22, 83, 51, 98, 69, 81, 32, 78, 28, 94, 13, 2, 97, 3, 76, 99, 51, 9, 21, 84, 66, 65, 36, 100, 41};
-        System.out.println(countSmaller(i));
+        int[] i = {5, 2, 6, 1};
+
+        CountSmallerNumbersAfterSelf s = new CountSmallerNumbersAfterSelf();
+        System.out.println(s.countSmaller(i));
     }
 
-    public static List<Integer> countSmaller(int[] nums) {
-
-        List<Integer> s = new ArrayList<>();
-
-        List<Integer> rev = new ArrayList<>();
-        for (int i = nums.length - 1; i >= 0; i--) {
-            s.add(nums[i]);
-            Collections.sort(s);
-            int index = s.indexOf(nums[i]);
-            rev.add(index);
-
+    private Node insert(Node n, int num, int index, int small) {
+        if (n == null) {
+            n = new Node();
+            n.val = num;
+            result[index] = small;
+        } else if (num < n.val) {
+            n.smallCount++;
+            n.left = insert(n.left, num, index, small);
+        } else if (num == n.val) {
+            n.dup++;
+            result[index] = small + n.smallCount;
+        } else {
+            n.right = insert(n.right, num, index, small + n.smallCount + n.dup);
         }
-        Collections.reverse(rev);
-        return rev;
+        return n;
+    }
+
+    public List<Integer> countSmaller(int[] nums) {
+        result = new int[nums.length];
+
+        for (int i = nums.length - 1; i >= 0; i--) {
+            root = insert(root, nums[i], i, 0);
+        }
+
+        List<Integer> r = new ArrayList<>();
+        for (int n : result) {
+            r.add(n);
+        }
+
+        return r;
+
+    }
+
+    class Node {
+
+        int val;
+        int smallCount;
+        int dup = 1;
+
+        Node left;
+        Node right;
     }
 }
